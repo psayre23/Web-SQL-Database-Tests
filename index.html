@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="js/runner.js"></script>
+	<link rel="stylesheet" href="css/runner.css"/>
+</head>
+<body>
+
+	<ul id="log"></ul>
+	<script type="text/tmpl" id="tmpl-log-item">
+		<li>{str}</li>
+	</script>
+
+	<script>
+		var t = Timer('open');
+		var db = window.openDatabase('test', '1.0', 'test db', 5e6);
+		t.lap('db open');
+		db.transaction(function (tx) {
+			t.lap('transaction start');
+			tx.executeSql('SELECT 1 AS num', null, function (res) {
+				t.lap('results');
+				t.stop();
+				t.display();
+			}, function (tx, err) {
+
+			});
+			t.lap('executeSql');
+		});
+		t.lap('transaction requested');
+	</script>
+
+</body>
+</html>
